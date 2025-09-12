@@ -3,6 +3,12 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import pandas
 import matplotlib
 import sys
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+client_id=os.getenv("SPOTIPY_CLIENT_ID")
+client_secret=os.getenv("SPOTIPY_CLIENT_SECRET")
 
 #Authenticate API Key
 auth_manager = SpotifyClientCredentials()
