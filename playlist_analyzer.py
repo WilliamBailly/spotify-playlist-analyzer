@@ -1,6 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import pandas
+import numpy as np
+import pandas as pd
 import matplotlib
 import sys
 from dotenv import load_dotenv
@@ -17,7 +18,8 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 def main():
     playlist = get_playlist()
     playlist_info = get_playlist_info(playlist)
-    print(playlist_info)
+    playlist_df = pd.DataFrame.from_dict(playlist_info, orient="index")
+    print(playlist_df)
 
 
 
