@@ -16,9 +16,10 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 
 def main():
     playlist = get_playlist()
-    for item in playlist:
-        track = item["track"]
-        print(track['name'])
+    playlist_info = get_playlist_info(playlist)
+    print(playlist_info)
+
+
 
 def get_playlist():
     #Retreive playlistID
@@ -34,13 +35,32 @@ def get_playlist():
     results = sp.playlist_tracks(playlist_id)
     tracks = results["items"]
 
+    #Get extra pages
     while results["next"]:
         results = sp.next(results)
         tracks.extend(results["items"])
     
     return tracks
 
+def get_playlist_info(playlist):
+    track_dict = {}
+    for item in playlist:
+        track = item["track"]
+        track_name = track["name"]
+        try:
+            release_date = track["album"]["release_date"]
+            year_released = release_date.split("-")[0]
+        except spotipy.SpotifyException:
+            continue
 
+        track_dict[track_name] = {
+            "year_released": year_released,
+            "popularity": track["popularity"],
+            "duration_ms": track["duration_ms"]
+        }
+
+    return track_dict
+        
 
 if __name__ == "__main__":
     main()
