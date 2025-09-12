@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
 import seaborn as sns
+import sys
 
 #Declare API Key
 load_dotenv()
@@ -24,23 +25,27 @@ def main():
 
 def get_playlist():
     #Retreive playlistID
-    playlist_url = input("Enter your spotify playlist url: ")
-    parts = playlist_url.split('/')
-    playlist_id_with_params = parts[-1] 
-    if '?' in playlist_id_with_params:
-        playlist_id = playlist_id_with_params.split('?')[0]
-    else:
-        playlist_id = playlist_id_with_params
+    try:
+        playlist_url = input("Enter your spotify playlist url: ")
+        parts = playlist_url.split('/')
+        playlist_id_with_params = parts[-1] 
+        if '?' in playlist_id_with_params:
+            playlist_id = playlist_id_with_params.split('?')[0]
+        else:
+            playlist_id = playlist_id_with_params
     
-    #Retrieve playlist
-    results = sp.playlist_tracks(playlist_id)
-    tracks = results["items"]
+        #Retrieve playlist
+        results = sp.playlist_tracks(playlist_id)
+        tracks = results["items"]
 
-    #Get extra pages
-    while results["next"]:
-        results = sp.next(results)
-        tracks.extend(results["items"])
-    
+        #Get extra pages
+        while results["next"]:
+            results = sp.next(results)
+            tracks.extend(results["items"])
+            
+    except Exception:
+        print("Please provide a valid URL")
+        sys.exit()
     return tracks
 
 def get_playlist_info(playlist):
