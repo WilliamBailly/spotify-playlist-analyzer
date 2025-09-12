@@ -2,8 +2,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import numpy as np
 import pandas as pd
-import matplotlib
-import sys
+import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
 
@@ -19,7 +18,7 @@ def main():
     playlist = get_playlist()
     playlist_info = get_playlist_info(playlist)
     playlist_df = pd.DataFrame.from_dict(playlist_info, orient="index")
-    print(playlist_df)
+    plot_playlist(playlist_df)
 
 
 
@@ -63,6 +62,12 @@ def get_playlist_info(playlist):
 
     return track_dict
         
+def plot_playlist(playlist_df):
+    plt.hist(playlist_df["duration_ms"] / 1000, bins="auto", edgecolor="black", color="yellow")
+    plt.title("Distribution of Song Durations")
+    plt.xlabel("Duration (seconds)")
+    plt.ylabel("Count")
+    plt.show()
 
 if __name__ == "__main__":
     main()
